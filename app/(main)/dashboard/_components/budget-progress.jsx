@@ -54,7 +54,7 @@ const BudgetProgress = ({ initialBudget, currentExpenses }) => {
   useEffect(() => {
     if (updatedBudget?.success) {
       setIsEditing(false);
-      toast.success("Budget updated successfully");
+      toast.success("Budget Updated Successfully");
     }
   }, [updatedBudget]);
 
