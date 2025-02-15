@@ -24,7 +24,7 @@ export default function EmailTemplate({
         <Preview>Malik Aapka  Monthly Financial report 🫡</Preview>
         <Body style={styles.body}>
           <Container style={styles.container}>
-            <Heading style={styles.title}>Ye Lo Saheb Apka Monthly Financial Report🙂‍↔️</Heading>
+            <Heading style={styles.title}>Ye Loo Saheb Apka Monthly Financial Report🙂‍↔️</Heading>
 
             <Text style={styles.text}>Namaste {userName},</Text>
             <Text style={styles.text}>
