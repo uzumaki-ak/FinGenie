@@ -53,6 +53,19 @@ import React, { useEffect, useState } from "react";
 import { useMemo } from "react";
 import { PacmanLoader } from "react-spinners";
 import { toast } from "sonner";
+import { UploadButton } from "./upload-button";
+import ImportCard from "./ImportCard";
+
+const VARIANTS = {
+  LIST: "LIST",
+  IMPORT: "IMPORT",
+};
+
+const INITIAL_IMPORT_RESULTS = {
+  data: [],
+  errors: [],
+  meta: {},
+};
 
 const RECURRING_INTERVALS = {
   DAILY: "Daily",
@@ -62,6 +75,22 @@ const RECURRING_INTERVALS = {
 };
 
 const TransactionTable = ({ transactions }) => {
+  const [variant, setVariant] = useState(VARIANTS.LIST);
+
+  const [importResults,setImportResults] = useState(INITIAL_IMPORT_RESULTS);
+  
+  const onUpload = (results) => {
+    console.log({results});
+    setImportResults(results);
+    setVariant(VARIANTS.IMPORT);
+  };
+
+  const onCancelImport = () => {
+    setImportResults(INITIAL_IMPORT_RESULTS);
+    setVariant(VARIANTS.LIST);
+  };
+
+  
   const router = useRouter();
 
   // to del bulk
@@ -178,6 +207,20 @@ const TransactionTable = ({ transactions }) => {
     setRecurringFilter("");
     setSelectedIds([]);
   };
+
+  if (variant === VARIANTS.IMPORT) {
+    return (
+      <>
+        {/* <div>This is a screen for import</div> */}
+        <ImportCard
+        data={importResults.data}
+        onCancel={onCancelImport}
+        onSubmit={()=>{}}
+        />
+      </>
+    );
+  }
+
   return (
     <div className="space-y-4">
       {deleteLoading && (
@@ -188,6 +231,7 @@ const TransactionTable = ({ transactions }) => {
 
       <div className="flex flex-col sm:flex-row gap-4">
         <div className="relative flex-1">
+          {/* <Button/> */}
           <FolderSearch className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
           <Input
             className="pl-8"
@@ -195,6 +239,11 @@ const TransactionTable = ({ transactions }) => {
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
+        </div>
+
+        <div>
+          {/* <Button className="bg-blue-600">Upload</Button> */}
+          <UploadButton onUpload={onUpload}/>
         </div>
 
         <div className="flex gap-2">
@@ -300,7 +349,7 @@ const TransactionTable = ({ transactions }) => {
                 onClick={() => handleSort("amount")}
               >
                 <div className="flex items-center justify-end">
-                  Amont{" "}
+                  Amount{" "}
                   {sortConfig.field === "amount" &&
                     (sortConfig.direction === "asc" ? (
                       <ChevronsUp className="ml-1 w-4 h-4" />
@@ -366,7 +415,7 @@ const TransactionTable = ({ transactions }) => {
                               variant="outline"
                               className="gap-1 bg-pink-100 text-rose-700 hover:bg-pink-300"
                             >
-                               <RefreshCw className="h-3 w-3" />
+                              <RefreshCw className="h-3 w-3" />
                               {
                                 RECURRING_INTERVALS[
                                   transaction.recurringInterval
